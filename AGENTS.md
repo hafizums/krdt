@@ -4,7 +4,7 @@
 
 **Project:** Kundasang Resilience Digital Twin
 **Short name:** KRDT
-**Repository status:** Pre-foundation
+**Repository status:** Gate 0 foundation implemented; gatekeeper review in progress
 **Primary location:** Kundasang, Ranau, Sabah, Malaysia
 
 KRDT is an operational digital twin for understanding and managing conditions affecting Kundasang.
@@ -1283,19 +1283,13 @@ A gate is done only when the gatekeeper issues PASS.
 
 Do not implement KRDT application features yet.
 
-The next authorized activity is **Gate 0 specification and repository foundation**.
+Gate 0 specification and repository foundation are implemented on branch `gate-0-foundation`.
 
-Before coding, obtain the Gate 0 brief containing:
+The active gate specification is `docs/gates/gate-0/SPEC.md`.
 
-- exact repository technology;
-- repository name;
-- required development environments;
-- project structure;
-- required foundation files;
-- validation commands;
-- Gate 0 acceptance criteria.
+Authorized work is limited to Gate 0 evidence corrections, validation reruns, and gatekeeper review support until Gate 0 receives an explicit `PASS`.
 
-Until that brief is approved, this `AGENTS.md` is the controlling project-development policy.
+Do not begin Gate 1.
 
 ## Persistent Project Memory
 

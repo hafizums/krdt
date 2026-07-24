@@ -284,11 +284,30 @@ def step_migration(*args: str) -> StepResult:
 def step_backend_integration_tests() -> StepResult:
     if not docker_available():
         return StepResult("backend integration tests", False, "docker not available")
+    env = migration_env()
+    os.environ.update(env)
     result = run_command(
-        ["uv", "run", "pytest", "apps/api/tests/integration", "-q"],
-        env=migration_env(),
+        ["uv", "run", "pytest", "apps/api/tests/integration", "-q", "-ra"],
+        env=env,
     )
-    return StepResult("backend integration tests", result.returncode == 0, result.stdout.strip())
+    output = "\n".join(part for part in (result.stdout, result.stderr) if part).strip()
+    if result.returncode != 0:
+        return StepResult("backend integration tests", False, output)
+    lowered = output.lower()
+    if "skipped" in lowered:
+        return StepResult(
+            "backend integration tests",
+            False,
+            f"integration tests were skipped: {output}",
+        )
+    passed_match = re.search(r"(\d+)\s+passed", output)
+    if not passed_match or int(passed_match.group(1)) < 2:
+        return StepResult(
+            "backend integration tests",
+            False,
+            f"expected 2 passed integration tests: {output}",
+        )
+    return StepResult("backend integration tests", True, output)
 
 
 def step_postgis_checks() -> StepResult:

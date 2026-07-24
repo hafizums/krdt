@@ -19,7 +19,8 @@ PLACEHOLDER_PATTERN = re.compile(r"YYYY-MM-DD|Not (yet )?created|Not available")
 CURRENT_GATE_PATTERN = re.compile(r"^Current gate:\s*(.+)$", re.MULTILINE)
 STATUS_PATTERN = re.compile(r"^Status:\s*(.+)$", re.MULTILINE)
 GATE0_STATUS_PATTERN = re.compile(r"^Gate 0 status:\s*(.+)$", re.MULTILINE)
-COMMIT_PATTERN = re.compile(r"^Commit:\s*(.+)$", re.MULTILINE)
+IMPLEMENTATION_COMMIT_PATTERN = re.compile(r"^Implementation commit:\s*(.+)$", re.MULTILINE)
+EVIDENCE_COMMIT_PATTERN = re.compile(r"^Evidence commit:\s*(.+)$", re.MULTILINE)
 NEXT_ACTION_PATTERN = re.compile(r"^Next authorized action:\s*(.+)$", re.MULTILINE)
 PASSED_GATE_PATTERN = re.compile(r"Gate 0.*\bPASS\b", re.IGNORECASE)
 
@@ -44,16 +45,21 @@ def git_head(relative: str = "HEAD") -> str:
     return result.stdout.strip()
 
 
-def commit_record_is_current(recorded: str) -> bool:
-    if not recorded or recorded.lower() in {"not available", "none", "n/a"}:
+def commit_exists(commit: str) -> bool:
+    if not commit or commit.lower() in {"not available", "none", "n/a", "pending"}:
         return False
-    head = git_head()
-    if not head:
-        return len(recorded) >= 7
-    if recorded == head:
-        return True
-    previous = git_head("HEAD~1")
-    return bool(previous) and recorded == previous
+    result = subprocess.run(
+        ["git", "cat-file", "-e", f"{commit}^{{commit}}"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
+def normalize_commit(value: str) -> str:
+    return value.strip().strip("`")
 
 
 def main() -> int:
@@ -87,11 +93,22 @@ def main() -> int:
         return fail("Handoff claims a gate passed without a recorded gatekeeper decision")
 
     if "READY FOR GATEKEEPER REVIEW" in status_value:
-        commit = COMMIT_PATTERN.search(handoff)
-        if not commit or not commit_record_is_current(commit.group(1).strip()):
-            return fail("Active commit field is blank while status is ready for review")
-        if commit.group(1).strip().lower() in {"not available", "none", "n/a"}:
-            return fail("Active commit field is blank while status is ready for review")
+        implementation = IMPLEMENTATION_COMMIT_PATTERN.search(handoff)
+        evidence = EVIDENCE_COMMIT_PATTERN.search(handoff)
+        if not implementation or not evidence:
+            return fail("Implementation and evidence commit metadata are required for review")
+        implementation_commit = normalize_commit(implementation.group(1))
+        evidence_commit = normalize_commit(evidence.group(1))
+        if not commit_exists(implementation_commit):
+            return fail("Implementation commit is missing or not present in git history")
+        if not commit_exists(evidence_commit):
+            return fail("Evidence commit is missing or not present in git history")
+        head = git_head()
+        if head and evidence_commit not in {head, git_head("HEAD~1")}:
+            return fail(
+                "Evidence commit must match HEAD or the metadata sync commit "
+                "while status is ready for review"
+            )
 
     if PASSED_GATE_PATTERN.search(handoff) and "Gate 0 status: PASS" not in memory:
         return fail("Handoff indicates Gate 0 passed without gatekeeper decision in memory")
