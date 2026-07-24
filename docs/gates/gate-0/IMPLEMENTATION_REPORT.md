@@ -118,8 +118,9 @@ All other previously passing criteria remain PASS unless noted above.
 ## Git Evidence
 
 - Branch: `gate-0-foundation`
-- Implementation commit: `e8961635d689f6e2794d095b1927d42ee5fc90eb`
-- Evidence commit: `10264bafb863f09b86a6c6aea5115b6b3dbfcade`
+- Review HEAD: `0b9d23872a3dd11eb497aec0d22c32fc30c4fb24`
+- Implementation commit: `e8961635d689f6e2794d095b1927d42ee5fc90eb` (tag: `gate-0-implementation`)
+- Evidence commit: `10264bafb863f09b86a6c6aea5115b6b3dbfcade` (tag: `gate-0-evidence`)
 - Working tree: clean after evidence resubmission commits
 
 ## Final Declaration
