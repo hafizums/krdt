@@ -149,6 +149,15 @@ def step_js_lockfile() -> StepResult:
     )
 
 
+def step_python_sync() -> StepResult:
+    result = run_command(["uv", "sync", "--frozen", "--all-packages"])
+    return StepResult(
+        "Python workspace sync",
+        result.returncode == 0,
+        result.stderr.strip() or result.stdout.strip(),
+    )
+
+
 def step_python_format() -> StepResult:
     result = run_command(["uv", "run", "ruff", "format", "--check", "apps/api", "scripts"])
     return StepResult("Python formatting check", result.returncode == 0, result.stderr.strip())
@@ -388,6 +397,7 @@ def main() -> int:
         step_toolchain,
         step_python_lockfile,
         step_js_lockfile,
+        step_python_sync,
         step_python_format,
         step_python_lint,
         step_python_typecheck,
