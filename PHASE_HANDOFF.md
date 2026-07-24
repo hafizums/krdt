@@ -13,10 +13,10 @@
 | Branch                | gate-0-foundation                        |
 | Implementation commit | `e8961635d689f6e2794d095b1927d42ee5fc90eb` |
 | Evidence commit       | `pending-evidence-sync`                  |
-| Working tree          | clean                                    |
+| Working tree          | clean |
 
 Implementation commit: e8961635d689f6e2794d095b1927d42ee5fc90eb
-Evidence commit: pending-evidence-sync
+Evidence commit: 8a07bb0d132978f47ec153c54306b544e4e85504
 
 Current gate: Gate 0
 Status: READY FOR GATEKEEPER REVIEW
