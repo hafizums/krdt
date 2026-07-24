@@ -40,7 +40,7 @@ uv run --frozen python scripts/validate.py
 ### Result
 
 ```text
-{"summary": {"passed": 22, "failed": 0}}
+{"summary": {"passed": 23, "failed": 0}}
 exit code: 0
 ```
 
@@ -65,7 +65,7 @@ uv run --frozen python scripts/validate.py --fast
 ### Result
 
 ```text
-{"summary": {"passed": 14, "failed": 0}}
+{"summary": {"passed": 15, "failed": 0}}
 exit code: 0
 ```
 
@@ -84,25 +84,24 @@ Evidence log: `docs/gates/gate-0/evidence/validate-fast-2026-07-24.log`
 
 ## Acceptance Criteria Evidence
 
-| Criterion                                | Result     | Evidence                                           |
-| ---------------------------------------- | ---------- | -------------------------------------------------- |
-| G0-07 Readiness verifies PostGIS         | PASS       | Integration test + PostGIS check step              |
-| G0-09 PostGIS via Compose                | PASS       | Docker Compose startup                             |
-| G0-10 Alembic cycle                      | PASS       | Validation migration steps + integration test      |
-| G0-11 PostGIS extensions verified        | PASS       | PostGIS extension check step                       |
-| G0-19 Canonical validation exit 0        | PASS       | Full validation exit 0 (22/22)                     |
-| Backend integration tests execute        | PASS       | 2 passed, 0 skipped in canonical validation log    |
-| Fast validation passes on reviewed state | PASS       | Fast validation exit 0 (14/14)                     |
-| G0-20 CI same workflow                   | UNVERIFIED | Requires GitHub Actions run after remote push      |
-| Review commit is unambiguous             | PASS       | Separate implementation and evidence commit fields |
-| Persistent memory internally consistent  | PASS       | Memory check step passes after evidence sync       |
+| Criterion                                | Result | Evidence                                                  |
+| ---------------------------------------- | ------ | --------------------------------------------------------- |
+| G0-07 Readiness verifies PostGIS         | PASS   | Integration test + PostGIS check step                     |
+| G0-09 PostGIS via Compose                | PASS   | Docker Compose startup                                    |
+| G0-10 Alembic cycle                      | PASS   | Validation migration steps + integration test             |
+| G0-11 PostGIS extensions verified        | PASS   | PostGIS extension check step                              |
+| G0-19 Canonical validation exit 0        | PASS   | Full validation exit 0 (23/23)                            |
+| Backend integration tests execute        | PASS   | 2 passed, 0 skipped in canonical validation log           |
+| Fast validation passes on reviewed state | PASS   | Fast validation exit 0 (15/15)                            |
+| G0-20 CI same workflow                   | PASS   | https://github.com/hafizums/krdt/actions/runs/30102845079 |
+| Review commit is unambiguous             | PASS   | Separate implementation and evidence commit fields        |
+| Persistent memory internally consistent  | PASS   | Memory check step passes after evidence sync              |
 
 All other previously passing criteria remain PASS unless noted above.
 
 ## Known Limitations
 
 - Host port `5432` is blocked on the implementation Windows host; validation uses fallback port `55432` via `KRDT_POSTGRES_HOST_PORT`
-- GitHub Actions evidence remains unverified until the branch is pushed to a configured remote
 - Starlette/FastAPI TestClient deprecation warning for `httpx2` remains non-blocking
 
 ## Scope Guard
@@ -117,9 +116,12 @@ All other previously passing criteria remain PASS unless noted above.
 
 ## Git Evidence
 
+- Remote: `https://github.com/hafizums/krdt.git`
 - Branch: `gate-0-foundation`
 - Implementation commit: `e8961635d689f6e2794d095b1927d42ee5fc90eb` (tag: `gate-0-implementation`)
 - Evidence commit: `10264bafb863f09b86a6c6aea5115b6b3dbfcade` (tag: `gate-0-evidence`)
+- CI verification commit: `8cd471bc437964bf785bb6f8e0adbdb21d122db6`
+- Passing CI run: `https://github.com/hafizums/krdt/actions/runs/30102845079`
 - Working tree: clean after evidence resubmission commits
 
 ## Final Declaration

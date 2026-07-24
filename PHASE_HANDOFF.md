@@ -54,7 +54,7 @@ uv run --frozen python scripts/validate.py
 Result:
 
 ```text
-{"summary": {"passed": 22, "failed": 0}}
+{"summary": {"passed": 23, "failed": 0}}
 exit code: 0
 ```
 
@@ -78,7 +78,7 @@ uv run --frozen python scripts/validate.py --fast
 Result:
 
 ```text
-{"summary": {"passed": 14, "failed": 0}}
+{"summary": {"passed": 15, "failed": 0}}
 exit code: 0
 ```
 
@@ -88,17 +88,28 @@ Evidence log: `docs/gates/gate-0/evidence/validate-fast-2026-07-24.log`
 
 ## 5. Remaining Evidence Gaps
 
-- GitHub Actions run remains **UNVERIFIED** until the branch is pushed to a remote and the workflow completes successfully
+NONE for CI after remote push and successful GitHub Actions run.
 
 ---
 
 ## 6. Blockers
 
-- No git remote is configured in the local repository; CI evidence cannot be produced locally without a remote push
+NONE for gatekeeper re-review.
 
 ---
 
-## 7. Exact Next Authorized Action
+## 7. Remote and CI Evidence
+
+- Remote: `https://github.com/hafizums/krdt.git`
+- Branch: `gate-0-foundation`
+- CI workflow: `.github/workflows/validate.yml`
+- Passing run: `https://github.com/hafizums/krdt/actions/runs/30102845079` on commit `8cd471bc437964bf785bb6f8e0adbdb21d122db6`
+- Ubuntu job: canonical validation (`uv run --frozen python scripts/validate.py`)
+- Windows job: fast validation (`uv run --frozen python scripts/validate.py --fast`)
+
+---
+
+## 8. Exact Next Authorized Action
 
 Independent Gate 0 re-review by the gatekeeper on branch `gate-0-foundation` using:
 
