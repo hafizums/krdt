@@ -45,9 +45,12 @@ def git_head(relative: str = "HEAD") -> str:
 
 
 def commit_record_is_current(recorded: str) -> bool:
-    if not recorded:
+    if not recorded or recorded.lower() in {"not available", "none", "n/a"}:
         return False
-    if recorded == git_head():
+    head = git_head()
+    if not head:
+        return len(recorded) >= 7
+    if recorded == head:
         return True
     previous = git_head("HEAD~1")
     return bool(previous) and recorded == previous

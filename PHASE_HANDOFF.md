@@ -11,10 +11,10 @@
 | Last updated  | 2026-07-24                               |
 | Updated by    | Cursor                                   |
 | Branch        | gate-0-foundation                        |
-| Commit        | 01d86c72ed54b6b915282582b4a91bc011755937 |
-| Working tree  | clean |
+| Commit        | 5bb3522519bcf91d2b2cece777b27e0d4a056741 |
+| Working tree  | clean                                    |
 
-Commit: 01d86c72ed54b6b915282582b4a91bc011755937
+Commit: 5bb3522519bcf91d2b2cece777b27e0d4a056741
 
 Current gate: Gate 0
 Status: READY FOR GATEKEEPER REVIEW
