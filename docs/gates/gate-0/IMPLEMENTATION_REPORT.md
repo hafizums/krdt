@@ -97,7 +97,7 @@ All other previously passing criteria remain PASS unless noted above.
 ## Git Evidence
 
 - Branch: `gate-0-foundation`
-- Commit: `cb43510a4b8fb812ca07f092fafa2bc1034d690a`
+- Commit: `01d86c72ed54b6b915282582b4a91bc011755937`
 - Working tree: clean after review-prep commits
 
 ## Final Declaration
