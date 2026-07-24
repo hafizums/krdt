@@ -1,0 +1,23 @@
+{
+  "name": "kundasang-resilience-digital-twin",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Kundasang Resilience Digital Twin monorepo",
+  "engines": {
+    "node": "24.18.0",
+    "pnpm": "11.14.0"
+  },
+  "packageManager": "pnpm@11.14.0",
+  "scripts": {
+    "web:dev": "pnpm --filter @krdt/web dev",
+    "web:lint": "pnpm --filter @krdt/web lint",
+    "web:typecheck": "pnpm --filter @krdt/web typecheck",
+    "web:test": "pnpm --filter @krdt/web test",
+    "web:build": "pnpm --filter @krdt/web build",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,yml,yaml,md}\"",
+    "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json,yml,yaml,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

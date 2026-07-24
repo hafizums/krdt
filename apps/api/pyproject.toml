@@ -1,0 +1,39 @@
+[project]
+name = "krdt-api"
+version = "0.1.0"
+description = "KRDT API foundation service"
+requires-python = "==3.13.14"
+dependencies = [
+    "alembic>=1.15.0,<2",
+    "fastapi>=0.139.2,<0.140",
+    "psycopg[binary]>=3.2.0,<4",
+    "pydantic>=2.11.0,<3",
+    "pydantic-settings>=2.9.0,<3",
+    "sqlalchemy>=2.0.40,<3",
+    "uvicorn[standard]>=0.34.0,<1",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.0,<1",
+    "mypy>=1.15.0,<2",
+    "pytest>=8.3.0,<9",
+    "pytest-asyncio>=0.25.0,<1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/krdt_api"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+files = ["src"]

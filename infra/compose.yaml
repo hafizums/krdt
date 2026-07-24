@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgis/postgis:18-3.6
+    container_name: krdt-postgres
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-krdt}
+      POSTGRES_USER: ${POSTGRES_USER:-krdt}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    volumes:
+      - krdt_postgres_data:/var/lib/postgresql
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-krdt} -d ${POSTGRES_DB:-krdt}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  krdt_postgres_data:

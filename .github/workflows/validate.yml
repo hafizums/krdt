@@ -1,0 +1,66 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: astral-sh/setup-uv@3abd57c51d519936540041205151790d6aefc72 # v5.4.1
+        with:
+          version: 0.11.32
+          enable-cache: true
+      - uses: actions/setup-python@a26af69be951a213d591a8c13723fb09827d9df4 # v5.1.1
+        with:
+          python-version: "3.13.14"
+      - uses: pnpm/action-setup@41ff72655975bd52cab0329e6c8a86aa47fb09a0 # v4.1.0
+        with:
+          version: 11.14.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f2797680 # v4.4.0
+        with:
+          node-version: "24.18.0"
+          cache: pnpm
+      - name: Install Docker Compose services
+        run: docker compose -f infra/compose.yaml up -d
+      - name: Run canonical validation
+        run: uv run --frozen python scripts/validate.py
+      - name: Upload validation logs on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75ba540aaa9064792359361b299 # v4.6.2
+        with:
+          name: validate-logs-ubuntu
+          path: |
+            **/pytest-cache-files-*
+            **/.pytest_cache
+
+  validate-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: astral-sh/setup-uv@3abd57c51d519936540041205151790d6aefc72 # v5.4.1
+        with:
+          version: 0.11.32
+          enable-cache: true
+      - uses: actions/setup-python@a26af69be951a213d591a8c13723fb09827d9df4 # v5.1.1
+        with:
+          python-version: "3.13.14"
+      - uses: pnpm/action-setup@41ff72655975bd52cab0329e6c8a86aa47fb09a0 # v4.1.0
+        with:
+          version: 11.14.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f2797680 # v4.4.0
+        with:
+          node-version: "24.18.0"
+          cache: pnpm
+      - name: Run fast validation
+        run: uv run --frozen python scripts/validate.py --fast
