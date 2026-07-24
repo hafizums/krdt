@@ -64,7 +64,7 @@ def main() -> int:
 
     if "READY FOR GATEKEEPER REVIEW" in status_value:
         commit = COMMIT_PATTERN.search(handoff)
-        if not commit or not commit.group(1).strip():
+        if not commit or not commit_record_is_current(commit.group(1).strip()):
             return fail("Active commit field is blank while status is ready for review")
         if commit.group(1).strip().lower() in {"not available", "none", "n/a"}:
             return fail("Active commit field is blank while status is ready for review")
