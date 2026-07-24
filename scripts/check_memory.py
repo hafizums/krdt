@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -30,6 +31,26 @@ def read_text(path: Path) -> str:
 def fail(message: str) -> int:
     print(message, file=sys.stderr)
     return 1
+
+
+def git_head(relative: str = "HEAD") -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", relative],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return result.stdout.strip()
+
+
+def commit_record_is_current(recorded: str) -> bool:
+    if not recorded:
+        return False
+    if recorded == git_head():
+        return True
+    previous = git_head("HEAD~1")
+    return bool(previous) and recorded == previous
 
 
 def main() -> int:
