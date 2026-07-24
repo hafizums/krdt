@@ -10,16 +10,16 @@ Create a reproducible, testable and documented repository foundation for KRDT wi
 
 ## Review-Prep Corrections (2026-07-24)
 
-| Item | Fix |
-| --- | --- |
-| Duplicate ADR heading | Removed duplicate `## 14` block from `PROJECT_MEMORY.md` |
-| Stale commit metadata | Added `scripts/write_review_commit.py` |
-| Alembic CLI invocation | Fixed argument splitting and working directory |
-| Alembic downgrade failure | Removed post-downgrade extension check from `migrations/env.py` |
-| CORS env parsing | Added `NoDecode` for comma-separated `KRDT_CORS_ORIGINS` |
-| pnpm esbuild scripts | Added `allowBuilds.esbuild: true` in `pnpm-workspace.yaml` |
+| Item                      | Fix                                                                 |
+| ------------------------- | ------------------------------------------------------------------- |
+| Duplicate ADR heading     | Removed duplicate `## 14` block from `PROJECT_MEMORY.md`            |
+| Stale commit metadata     | Added `scripts/write_review_commit.py`                              |
+| Alembic CLI invocation    | Fixed argument splitting and working directory                      |
+| Alembic downgrade failure | Removed post-downgrade extension check from `migrations/env.py`     |
+| CORS env parsing          | Added `NoDecode` for comma-separated `KRDT_CORS_ORIGINS`            |
+| pnpm esbuild scripts      | Added `allowBuilds.esbuild: true` in `pnpm-workspace.yaml`          |
 | Blocked Windows port 5432 | Added `KRDT_POSTGRES_HOST_PORT` with validation fallback to `55432` |
-| Integration Alembic path | Fixed config paths in integration tests |
+| Integration Alembic path  | Fixed config paths in integration tests                             |
 
 ## Validation Commands
 
@@ -56,14 +56,14 @@ Result: pending rerun after final commit metadata sync.
 
 ## Toolchain Evidence
 
-| Tool       | Required | Actual   | Result |
-| ---------- | -------: | -------- | ------ |
-| Python     |  3.13.14 | 3.13.14  | PASS   |
-| uv         |  0.11.32 | 0.11.32  | PASS   |
-| Node.js    |  24.18.0 | 24.18.0  | PASS   |
-| pnpm       |  11.14.0 | 11.14.0  | PASS   |
-| PostgreSQL |     18.x | 18.x     | PASS   |
-| PostGIS    |    3.6.x | 3.6.x    | PASS   |
+| Tool       | Required | Actual  | Result |
+| ---------- | -------: | ------- | ------ |
+| Python     |  3.13.14 | 3.13.14 | PASS   |
+| uv         |  0.11.32 | 0.11.32 | PASS   |
+| Node.js    |  24.18.0 | 24.18.0 | PASS   |
+| pnpm       |  11.14.0 | 11.14.0 | PASS   |
+| PostgreSQL |     18.x | 18.x    | PASS   |
+| PostGIS    |    3.6.x | 3.6.x   | PASS   |
 
 ## Acceptance Criteria Evidence
 
@@ -97,8 +97,8 @@ All other previously passing criteria remain PASS unless noted above.
 ## Git Evidence
 
 - Branch: `gate-0-foundation`
-- Commit: pending-review-commit-sync
-- Working tree: pending final commit
+- Commit: `fa5943a6ba2fe1eb8bc219a0b9aa2b7dfc7550bd`
+- Working tree: clean after review-prep commits
 
 ## Final Declaration
 

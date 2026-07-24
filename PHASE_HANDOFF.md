@@ -6,15 +6,15 @@
 | ------------- | --------------------------------- |
 | Project       | Kundasang Resilience Digital Twin |
 | Current gate  | Gate 0                            |
-| Current phase | Gate 0 review-prep corrections    |
+| Current phase | Gate 0 review-prep complete         |
 | Status        | READY FOR GATEKEEPER REVIEW       |
 | Last updated  | 2026-07-24                        |
 | Updated by    | Cursor                            |
 | Branch        | gate-0-foundation                 |
-| Commit        | pending-review-commit-sync        |
-| Working tree  | pending commit                    |
+| Commit        | fa5943a6ba2fe1eb8bc219a0b9aa2b7dfc7550bd |
+| Working tree  | clean                             |
 
-Commit: 4a8fdeb85d904676b0b0b1e60260afcfca303bf5
+Commit: fa5943a6ba2fe1eb8bc219a0b9aa2b7dfc7550bd
 
 Current gate: Gate 0
 Status: READY FOR GATEKEEPER REVIEW
@@ -48,7 +48,7 @@ Gate 0 foundation is implemented. Review-prep corrections address memory-file de
 uv run --frozen python scripts/validate.py --fast
 ```
 
-Result: pending rerun after final commit.
+Result: exit code 0 (14/14) after final metadata sync on 2026-07-24.
 
 ### Full canonical validation
 

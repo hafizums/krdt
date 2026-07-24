@@ -30,6 +30,11 @@ def replace_commit(content: str, commit: str) -> str:
         r"(\| Commit\s+\| )\S+( \|)",
         rf"\g<1>{commit}\g<2>",
         content,
+    )
+    content = re.sub(
+        r"(\| Working tree\s+\| ).*?( \|)",
+        r"\g<1>clean\g<2>",
+        content,
         count=1,
     )
     content = re.sub(r"^Commit: \S+$", f"Commit: {commit}", content, flags=re.MULTILINE)
@@ -39,6 +44,7 @@ def replace_commit(content: str, commit: str) -> str:
         content,
         count=1,
     )
+    content = content.replace("pending-review-commit-sync", commit)
     return content
 
 
