@@ -15,8 +15,12 @@ permissions:
 jobs:
   validate-ubuntu:
     runs-on: ubuntu-latest
+    env:
+      CI: "true"
     steps:
       - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v5.4.1
         with:
           version: 0.11.32
