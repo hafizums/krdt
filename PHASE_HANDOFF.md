@@ -12,7 +12,7 @@
 | Updated by            | Cursor                                     |
 | Branch                | gate-0-foundation                          |
 | Implementation commit | `e8961635d689f6e2794d095b1927d42ee5fc90eb` |
-| Evidence commit       | `pending-evidence-sync`                    |
+| Evidence commit       | `8a07bb0d132978f47ec153c54306b544e4e85504` |
 | Working tree          | clean                                      |
 
 Implementation commit: e8961635d689f6e2794d095b1927d42ee5fc90eb
@@ -103,6 +103,6 @@ Evidence log: `docs/gates/gate-0/evidence/validate-fast-2026-07-24.log`
 Independent Gate 0 re-review by the gatekeeper on branch `gate-0-foundation` using:
 
 - Implementation commit: `e8961635d689f6e2794d095b1927d42ee5fc90eb`
-- Evidence commit: recorded by `scripts/write_review_commit.py` after evidence commit
+- Evidence commit: `8a07bb0d132978f47ec153c54306b544e4e85504` (synchronized review documents and validation claims)
 
 Cursor must not begin Gate 1.

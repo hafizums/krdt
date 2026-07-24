@@ -13,7 +13,7 @@ Create a reproducible, testable and documented repository foundation for KRDT wi
 | Role                  | Commit                                     |
 | --------------------- | ------------------------------------------ |
 | Implementation commit | `e8961635d689f6e2794d095b1927d42ee5fc90eb` |
-| Evidence commit       | `pending-evidence-sync`                    |
+| Evidence commit       | `8a07bb0d132978f47ec153c54306b544e4e85504` |
 
 The implementation commit contains completed Gate 0 code. The evidence commit is a later commit that records validation output and synchronized review documents. These identifiers are intentionally separate because a tracked file cannot contain the hash of the same commit that contains that file.
 
