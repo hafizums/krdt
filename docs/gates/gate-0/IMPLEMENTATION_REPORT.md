@@ -22,13 +22,13 @@ Create a reproducible, testable and documented repository foundation for KRDT wi
 
 ## Files Changed
 
-| File | Change |
-| --- | --- |
-| Repository root | Added monorepo tooling, memory files, docs, scripts, CI |
-| `apps/api/` | Backend scaffold, health endpoints, Alembic, tests |
-| `apps/web/` | Frontend foundation page and tests |
-| `infra/` | Docker Compose and PostGIS init SQL |
-| `docs/` | Charter, security, risk, ADRs, architecture, Gate 0 spec |
+| File            | Change                                                   |
+| --------------- | -------------------------------------------------------- |
+| Repository root | Added monorepo tooling, memory files, docs, scripts, CI  |
+| `apps/api/`     | Backend scaffold, health endpoints, Alembic, tests       |
+| `apps/web/`     | Frontend foundation page and tests                       |
+| `infra/`        | Docker Compose and PostGIS init SQL                      |
+| `docs/`         | Charter, security, risk, ADRs, architecture, Gate 0 spec |
 
 ## Architecture Notes
 
@@ -47,10 +47,10 @@ Create a reproducible, testable and documented repository foundation for KRDT wi
 
 ## API Changes
 
-| Method | Route | Purpose |
-| --- | --- | --- |
-| GET | `/health/live` | Liveness without database |
-| GET | `/health/ready` | Readiness with PostgreSQL/PostGIS checks |
+| Method | Route           | Purpose                                  |
+| ------ | --------------- | ---------------------------------------- |
+| GET    | `/health/live`  | Liveness without database                |
+| GET    | `/health/ready` | Readiness with PostgreSQL/PostGIS checks |
 
 ## Security and Privacy
 
@@ -62,17 +62,17 @@ Create a reproducible, testable and documented repository foundation for KRDT wi
 
 ## Tests Added or Updated
 
-| Test | Behavior Verified |
-| --- | --- |
-| `test_live_returns_expected_response` | Liveness payload and HTTP 200 |
-| `test_live_does_not_require_database` | Liveness avoids DB access |
-| `test_readiness_returns_503_when_database_unavailable` | Safe readiness failure |
-| `test_correlation_id_is_returned` | Correlation header propagation |
-| `test_malformed_correlation_id_is_replaced` | Invalid correlation ID handling |
-| `test_settings_*` | Configuration parsing and CORS rejection |
-| `test_alembic_upgrade_downgrade_upgrade` | Migration cycle (requires Docker DB) |
-| `App.test.tsx` | Frontend identity and backend status states |
-| `test_check_memory.py` | Memory consistency rules |
+| Test                                                   | Behavior Verified                           |
+| ------------------------------------------------------ | ------------------------------------------- |
+| `test_live_returns_expected_response`                  | Liveness payload and HTTP 200               |
+| `test_live_does_not_require_database`                  | Liveness avoids DB access                   |
+| `test_readiness_returns_503_when_database_unavailable` | Safe readiness failure                      |
+| `test_correlation_id_is_returned`                      | Correlation header propagation              |
+| `test_malformed_correlation_id_is_replaced`            | Invalid correlation ID handling             |
+| `test_settings_*`                                      | Configuration parsing and CORS rejection    |
+| `test_alembic_upgrade_downgrade_upgrade`               | Migration cycle (requires Docker DB)        |
+| `App.test.tsx`                                         | Frontend identity and backend status states |
+| `test_check_memory.py`                                 | Memory consistency rules                    |
 
 ## Validation Commands
 
@@ -117,49 +117,49 @@ PostGIS extension checks: FAIL (docker not available)
 
 ## Acceptance Criteria Evidence
 
-| Criterion | Result | Evidence |
-| --- | --- | --- |
-| G0-01 Monorepo structure | PASS | Repository tree matches spec |
-| G0-02 Pinned runtime versions | PASS | `.python-version`, `package.json`, lockfiles |
-| G0-03 Lockfiles install frozen | PASS | `uv lock --check`, `pnpm install --frozen-lockfile` |
-| G0-04 Backend starts | PASS | `create_app()` and uvicorn entrypoint |
-| G0-05 Frontend starts | PASS | `pnpm --filter @krdt/web dev` command documented |
-| G0-06 Liveness without DB | PASS | `test_live_does_not_require_database` |
-| G0-07 Readiness verifies PostGIS | PARTIAL | Implemented; integration evidence requires Docker |
-| G0-08 Readiness 503 safely | PASS | `test_readiness_returns_503_when_database_unavailable` |
-| G0-09 PostGIS via Compose | PARTIAL | `infra/compose.yaml`; local Docker unavailable |
-| G0-10 Alembic cycle | PARTIAL | Migration authored; integration requires Docker |
-| G0-11 PostGIS extensions verified | PARTIAL | Init SQL + migration; runtime check needs Docker |
-| G0-12 Backend tests pass | PASS | 11 unit tests passed |
-| G0-13 Frontend tests pass | PASS | 6 tests passed |
-| G0-14 Backend typecheck | PASS | `uv run mypy` |
-| G0-15 Frontend typecheck | PASS | `pnpm web:typecheck` |
-| G0-16 Linting | PASS | Ruff + ESLint |
-| G0-17 Formatting | PASS | Ruff format + Prettier |
-| G0-18 Frontend build | PASS | `pnpm web:build` |
-| G0-19 Canonical validation exit 0 | FAIL locally | Full validation exit 1 without Docker |
-| G0-20 CI same workflow | UNVERIFIED | Requires GitHub Actions run after push |
-| G0-21 Six ADRs accepted | PASS | `docs/adr/0001` through `0006` |
-| G0-22 Governance docs | PASS | `docs/PROJECT_CHARTER.md` etc. |
-| G0-23 Memory files consistent | PASS | `scripts/check_memory.py` |
-| G0-24 Memory tests pass | PASS | 3 memory tests |
-| G0-25 No real datasets | PASS | No operational geospatial data committed |
-| G0-26 No credentials | PASS | `.env.example` placeholders only |
-| G0-27 DB localhost bound | PASS | `127.0.0.1:5432` in compose |
-| G0-28 README setup | PASS | `README.md` |
-| G0-29 Implementation evidence | PASS | This report |
-| G0-30 No Gate 1 features | PASS | Scope guard confirmed |
+| Criterion                         | Result       | Evidence                                               |
+| --------------------------------- | ------------ | ------------------------------------------------------ |
+| G0-01 Monorepo structure          | PASS         | Repository tree matches spec                           |
+| G0-02 Pinned runtime versions     | PASS         | `.python-version`, `package.json`, lockfiles           |
+| G0-03 Lockfiles install frozen    | PASS         | `uv lock --check`, `pnpm install --frozen-lockfile`    |
+| G0-04 Backend starts              | PASS         | `create_app()` and uvicorn entrypoint                  |
+| G0-05 Frontend starts             | PASS         | `pnpm --filter @krdt/web dev` command documented       |
+| G0-06 Liveness without DB         | PASS         | `test_live_does_not_require_database`                  |
+| G0-07 Readiness verifies PostGIS  | PARTIAL      | Implemented; integration evidence requires Docker      |
+| G0-08 Readiness 503 safely        | PASS         | `test_readiness_returns_503_when_database_unavailable` |
+| G0-09 PostGIS via Compose         | PARTIAL      | `infra/compose.yaml`; local Docker unavailable         |
+| G0-10 Alembic cycle               | PARTIAL      | Migration authored; integration requires Docker        |
+| G0-11 PostGIS extensions verified | PARTIAL      | Init SQL + migration; runtime check needs Docker       |
+| G0-12 Backend tests pass          | PASS         | 11 unit tests passed                                   |
+| G0-13 Frontend tests pass         | PASS         | 6 tests passed                                         |
+| G0-14 Backend typecheck           | PASS         | `uv run mypy`                                          |
+| G0-15 Frontend typecheck          | PASS         | `pnpm web:typecheck`                                   |
+| G0-16 Linting                     | PASS         | Ruff + ESLint                                          |
+| G0-17 Formatting                  | PASS         | Ruff format + Prettier                                 |
+| G0-18 Frontend build              | PASS         | `pnpm web:build`                                       |
+| G0-19 Canonical validation exit 0 | FAIL locally | Full validation exit 1 without Docker                  |
+| G0-20 CI same workflow            | UNVERIFIED   | Requires GitHub Actions run after push                 |
+| G0-21 Six ADRs accepted           | PASS         | `docs/adr/0001` through `0006`                         |
+| G0-22 Governance docs             | PASS         | `docs/PROJECT_CHARTER.md` etc.                         |
+| G0-23 Memory files consistent     | PASS         | `scripts/check_memory.py`                              |
+| G0-24 Memory tests pass           | PASS         | 3 memory tests                                         |
+| G0-25 No real datasets            | PASS         | No operational geospatial data committed               |
+| G0-26 No credentials              | PASS         | `.env.example` placeholders only                       |
+| G0-27 DB localhost bound          | PASS         | `127.0.0.1:5432` in compose                            |
+| G0-28 README setup                | PASS         | `README.md`                                            |
+| G0-29 Implementation evidence     | PASS         | This report                                            |
+| G0-30 No Gate 1 features          | PASS         | Scope guard confirmed                                  |
 
 ## Toolchain Evidence
 
-| Tool | Required | Actual | Result |
-| --- | ---: | ---: | --- |
-| Python | 3.13.14 | 3.13.14 | PASS |
-| uv | 0.11.32 | 0.11.32 | PASS |
-| Node.js | 24.18.0 | 24.18.0 | PASS |
-| pnpm | 11.14.0 | 11.14.0 | PASS |
-| PostgreSQL | 18.x | not verified locally | FAIL |
-| PostGIS | 3.6.x | not verified locally | FAIL |
+| Tool       | Required |               Actual | Result |
+| ---------- | -------: | -------------------: | ------ |
+| Python     |  3.13.14 |              3.13.14 | PASS   |
+| uv         |  0.11.32 |              0.11.32 | PASS   |
+| Node.js    |  24.18.0 |              24.18.0 | PASS   |
+| pnpm       |  11.14.0 |              11.14.0 | PASS   |
+| PostgreSQL |     18.x | not verified locally | FAIL   |
+| PostGIS    |    3.6.x | not verified locally | FAIL   |
 
 ## Full Validation Summary
 
