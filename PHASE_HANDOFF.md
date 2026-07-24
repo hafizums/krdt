@@ -2,19 +2,19 @@
 
 ## 1. Handoff Metadata
 
-| Field         | Value                                    |
-| ------------- | ---------------------------------------- |
-| Project       | Kundasang Resilience Digital Twin        |
-| Current gate  | Gate 0                                   |
-| Current phase | Gate 0 implementation complete           |
-| Status        | READY FOR GATEKEEPER REVIEW              |
-| Last updated  | 2026-07-24                               |
-| Updated by    | Cursor                                   |
-| Branch        | gate-0-foundation                        |
-| Commit        | 162f0b1d2778f270866cab7b4b1e29c69f182fb1 |
-| Working tree  | clean                                    |
+| Field         | Value                             |
+| ------------- | --------------------------------- |
+| Project       | Kundasang Resilience Digital Twin |
+| Current gate  | Gate 0                            |
+| Current phase | Gate 0 review-prep corrections    |
+| Status        | READY FOR GATEKEEPER REVIEW       |
+| Last updated  | 2026-07-24                        |
+| Updated by    | Cursor                            |
+| Branch        | gate-0-foundation                 |
+| Commit        | pending-review-commit-sync        |
+| Working tree  | pending commit                    |
 
-Commit: 162f0b1d2778f270866cab7b4b1e29c69f182fb1
+Commit: pending-review-commit-sync
 
 Current gate: Gate 0
 Status: READY FOR GATEKEEPER REVIEW
@@ -24,74 +24,69 @@ Next authorized action: Independent Gate 0 review
 
 ## 2. Current Objective
 
-Gate 0 — Repository and Governance Foundation is implemented and awaiting independent gatekeeper review.
+Gate 0 foundation is implemented. Review-prep corrections address memory-file defects, validation bugs, and missing Docker-backed evidence.
 
 ---
 
-## 3. Current Verified State
+## 3. Corrections Completed
 
-- Monorepo foundation scaffolded per Gate 0 specification
-- Backend health endpoints implemented at `/health/live` and `/health/ready`
-- Empty versioned API router at `/api/v1`
-- Frontend foundation status page implemented
-- PostgreSQL/PostGIS Docker Compose service defined
-- Alembic baseline migration established
-- Canonical validation command implemented at `scripts/validate.py`
-- Governance documents and six accepted ADRs created
-- CI workflow added at `.github/workflows/validate.yml`
-- No Gate 1 domain features implemented
-- No real Kundasang operational datasets committed
+- Removed duplicate ADR heading in `PROJECT_MEMORY.md`
+- Fixed Alembic command invocation and downgrade path in `scripts/validate.py`
+- Fixed CORS env parsing for migration commands (`NoDecode`)
+- Removed post-downgrade extension verification from `migrations/env.py`
+- Added configurable PostgreSQL host port (`KRDT_POSTGRES_HOST_PORT`, default `5432`)
+- Added `allowBuilds.esbuild: true` for deterministic pnpm installs
+- Added `scripts/write_review_commit.py` to synchronize review commit metadata
 
 ---
 
-## 4. Work Completed in This Phase
+## 4. Latest Validation Evidence
 
-- Repository structure, backend, frontend, infra, scripts, tests, CI, docs, ADRs
-- Lockfiles generated (`uv.lock`, `pnpm-lock.yaml`)
-- Memory validation script and tests
-
----
-
-## 5. Known Limitations
-
-- Full local validation requiring Docker was not executed in this environment because Docker CLI is unavailable on the implementation host
-- CI evidence must be collected from GitHub Actions after push
-
----
-
-## 6. Latest Validation Evidence
-
-Command:
+### Fast validation
 
 ```bash
 uv run --frozen python scripts/validate.py --fast
 ```
 
-Result: exit code 0 (14/14 steps passed) on 2026-07-24 with Node 24.18.0, pnpm 11.14.0, Python 3.13.14, uv 0.11.32.
+Result: pending rerun after final commit.
 
-Full canonical validation:
+### Full canonical validation
 
 ```bash
 uv run --frozen python scripts/validate.py
 ```
 
-Result: exit code 1 — Docker CLI unavailable on the implementation host (7 database-related steps failed). Non-Docker steps passed (15/22).
+Result on 2026-07-24 with Docker Desktop running:
+
+```text
+{"summary": {"passed": 22, "failed": 0}}
+exit code: 0
+```
+
+Notes:
+
+- Host PostgreSQL port `5432` is blocked on this Windows host; validation automatically fell back to host port `55432` while keeping container port `5432`.
+- PostGIS version observed: `3.6 USE_GEOS=1 USE_PROJ=1 USE_STATS=1`
+- Alembic cycle: upgrade head → downgrade base → upgrade head succeeded
+- Backend integration tests were skipped in this run because the subprocess environment did not yet propagate the fallback port to pytest collection (follow-up fix applied)
 
 ---
 
-## 7. Blockers
+## 5. Remaining Evidence Gaps
 
-NONE for gatekeeper review preparation. Docker unavailable locally blocks only local full-validation evidence.
+- GitHub Actions run still **UNVERIFIED** (requires remote push)
+- Gatekeeper must review the final commit hash recorded after `scripts/write_review_commit.py`
 
 ---
 
-## 8. Exact Next Authorized Action
+## 6. Blockers
 
-Independent Gate 0 review by the gatekeeper using:
+NONE for gatekeeper review preparation on repository evidence.
 
-- repository diff on `gate-0-foundation`
-- `docs/gates/gate-0/IMPLEMENTATION_REPORT.md`
-- canonical validation output
-- CI run evidence
+---
+
+## 7. Exact Next Authorized Action
+
+Independent Gate 0 review by the gatekeeper on branch `gate-0-foundation` at the commit recorded by `scripts/write_review_commit.py`.
 
 Cursor must not begin Gate 1.

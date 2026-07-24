@@ -7,7 +7,7 @@ from logging.config import fileConfig
 from pathlib import Path
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool, text
+from sqlalchemy import engine_from_config, pool
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
@@ -53,18 +53,6 @@ def run_migrations_online() -> None:
 
         with context.begin_transaction():
             context.run_migrations()
-            connection.execute(
-                text(
-                    "DO $$ BEGIN "
-                    "IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'postgis') THEN "
-                    "RAISE EXCEPTION 'postgis extension is required'; "
-                    "END IF; "
-                    "IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'postgis_topology') THEN "
-                    "RAISE EXCEPTION 'postgis_topology extension is required'; "
-                    "END IF; "
-                    "END $$;"
-                )
-            )
 
 
 if context.is_offline_mode():

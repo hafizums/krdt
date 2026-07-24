@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import pytest
 from alembic import command
@@ -13,11 +14,23 @@ from sqlalchemy import create_engine, text
 from krdt_api.config import Settings
 from krdt_api.main import create_app
 
+API_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _alembic_config(database_url: str) -> Config:
+    os.environ["KRDT_DATABASE_URL"] = database_url
+    config = Config(str(API_ROOT / "alembic.ini"))
+    config.set_main_option("script_location", str(API_ROOT / "migrations"))
+    return config
+
 
 def _database_available() -> bool:
     url = os.environ.get(
         "KRDT_TEST_DATABASE_URL",
-        "postgresql+psycopg://krdt:change-me@127.0.0.1:5432/krdt",
+        os.environ.get(
+            "KRDT_DATABASE_URL",
+            "postgresql+psycopg://krdt:change-me@127.0.0.1:5432/krdt",
+        ),
     )
     try:
         engine = create_engine(url, connect_args={"connect_timeout": 2})
@@ -40,7 +53,10 @@ def integration_settings() -> Settings:
         api_port=8000,
         database_url=os.environ.get(
             "KRDT_TEST_DATABASE_URL",
-            "postgresql+psycopg://krdt:change-me@127.0.0.1:5432/krdt",
+            os.environ.get(
+                "KRDT_DATABASE_URL",
+                "postgresql+psycopg://krdt:change-me@127.0.0.1:5432/krdt",
+            ),
         ),
         database_connect_timeout_seconds=5,
         cors_origins=["http://localhost:5173"],
@@ -65,8 +81,7 @@ def test_readiness_succeeds_with_available_postgis(integration_client: TestClien
 
 
 def test_alembic_upgrade_downgrade_upgrade(integration_settings: Settings) -> None:
-    config = Config("apps/api/alembic.ini")
-    os.environ["KRDT_DATABASE_URL"] = integration_settings.database_url
+    config = _alembic_config(integration_settings.database_url)
     command.downgrade(config, "base")
     command.upgrade(config, "head")
     command.downgrade(config, "base")

@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import re
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 CorrelationIdBehavior = Literal["replace", "reject"]
 
@@ -30,7 +30,9 @@ class Settings(BaseSettings):
     api_port: int = 8000
     database_url: str
     database_connect_timeout_seconds: int = Field(default=5, ge=1, le=60)
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
+    cors_origins: Annotated[list[str], NoDecode] = Field(
+        default_factory=lambda: ["http://localhost:5173"]
+    )
     correlation_id_behavior: CorrelationIdBehavior = "replace"
     service_name: str = "krdt-api"
     app_version: str = "0.1.0"

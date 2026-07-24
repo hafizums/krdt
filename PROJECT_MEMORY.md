@@ -72,8 +72,6 @@ No gates have been completed.
 
 ## 6. Accepted Architecture Decisions
 
-## 14. Accepted Architecture Decisions
-
 | ADR  | Title                             | Status   | Date       |
 | ---- | --------------------------------- | -------- | ---------- |
 | 0001 | Use a monorepo                    | ACCEPTED | 2026-07-24 |

@@ -197,10 +197,19 @@ def step_frontend_build() -> StepResult:
     return StepResult("frontend production build", result.returncode == 0, result.stderr.strip())
 
 
+def docker_env() -> dict[str, str]:
+    merged = os.environ.copy()
+    merged.update(migration_env())
+    return merged
+
+
 def step_compose_config() -> StepResult:
     if shutil.which("docker") is None:
         return StepResult("Docker Compose configuration validation", False, "docker not available")
-    result = run_command(["docker", "compose", "-f", "infra/compose.yaml", "config"])
+    result = run_command(
+        ["docker", "compose", "-f", "infra/compose.yaml", "config"],
+        env=docker_env(),
+    )
     return StepResult(
         "Docker Compose configuration validation",
         result.returncode == 0,
@@ -215,38 +224,61 @@ def docker_available() -> bool:
 def step_database_startup() -> StepResult:
     if not docker_available():
         return StepResult("database startup and health wait", False, "docker not available")
-    run_command(["docker", "compose", "-f", "infra/compose.yaml", "up", "-d"])
-    for _ in range(30):
-        result = run_command(
-            ["docker", "compose", "-f", "infra/compose.yaml", "ps", "--format", "json"]
+
+    configured_port = os.environ.get("KRDT_POSTGRES_HOST_PORT")
+    candidate_ports = [configured_port] if configured_port else ["5432", "55432"]
+    last_error = "database did not become healthy"
+
+    for port in candidate_ports:
+        os.environ["KRDT_POSTGRES_HOST_PORT"] = port
+        run_command(
+            ["docker", "compose", "-f", "infra/compose.yaml", "down", "--remove-orphans"],
+            env=docker_env(),
         )
-        if result.returncode == 0 and "healthy" in result.stdout.lower():
-            return StepResult("database startup and health wait", True)
-        time.sleep(2)
-    return StepResult("database startup and health wait", False, "database did not become healthy")
+        start = run_command(
+            ["docker", "compose", "-f", "infra/compose.yaml", "up", "-d"],
+            env=docker_env(),
+        )
+        if start.returncode != 0:
+            last_error = start.stderr.strip() or start.stdout.strip() or last_error
+            continue
+        for _ in range(60):
+            result = run_command(
+                ["docker", "compose", "-f", "infra/compose.yaml", "ps", "--format", "json"],
+                env=docker_env(),
+            )
+            if result.returncode == 0 and "healthy" in result.stdout.lower():
+                return StepResult("database startup and health wait", True, f"host port {port}")
+            time.sleep(2)
+        last_error = f"database did not become healthy on host port {port}"
+
+    return StepResult("database startup and health wait", False, last_error)
 
 
 def migration_env() -> dict[str, str]:
+    port = os.environ.get("KRDT_POSTGRES_HOST_PORT", "5432")
     return {
-        "KRDT_DATABASE_URL": "postgresql+psycopg://krdt:change-me@127.0.0.1:5432/krdt",
+        "KRDT_DATABASE_URL": f"postgresql+psycopg://krdt:change-me@127.0.0.1:{port}/krdt",
         "KRDT_ENVIRONMENT": "development",
         "KRDT_LOG_LEVEL": "INFO",
         "KRDT_API_HOST": "0.0.0.0",
         "KRDT_API_PORT": "8000",
         "KRDT_DATABASE_CONNECT_TIMEOUT_SECONDS": "5",
         "KRDT_CORS_ORIGINS": "http://localhost:5173",
+        "KRDT_POSTGRES_HOST_PORT": port,
     }
 
 
-def step_migration(action: str) -> StepResult:
+def step_migration(*args: str) -> StepResult:
     if not docker_available():
-        return StepResult(f"migration {action}", False, "docker not available")
+        return StepResult(f"migration {' '.join(args)}", False, "docker not available")
     result = run_command(
-        ["uv", "run", "--project", "apps/api", "alembic", action],
+        ["uv", "run", "alembic", *args],
         cwd=ROOT / "apps/api",
         env=migration_env(),
     )
-    return StepResult(f"migration {action}", result.returncode == 0, result.stderr.strip())
+    label = f"migration {' '.join(args)}"
+    return StepResult(label, result.returncode == 0, result.stderr.strip() or result.stdout.strip())
 
 
 def step_backend_integration_tests() -> StepResult:
@@ -281,7 +313,8 @@ def step_postgis_checks() -> StepResult:
                 "SELECT PostGIS_Version(); "
                 "SELECT EXISTS(SELECT 1 FROM pg_extension WHERE extname='postgis_topology');"
             ),
-        ]
+        ],
+        env=docker_env(),
     )
     ok = result.returncode == 0 and bool(result.stdout.strip())
     return StepResult("PostGIS extension checks", ok, result.stdout.strip())
@@ -352,9 +385,9 @@ def main() -> int:
             [
                 step_compose_config,
                 step_database_startup,
-                lambda: step_migration("upgrade head"),
-                lambda: step_migration("downgrade base"),
-                lambda: step_migration("upgrade head"),
+                lambda: step_migration("upgrade", "head"),
+                lambda: step_migration("downgrade", "base"),
+                lambda: step_migration("upgrade", "head"),
                 step_backend_integration_tests,
                 step_postgis_checks,
                 step_working_tree,
