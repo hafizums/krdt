@@ -76,7 +76,8 @@ def test_valid_gate0_review_ready_memory_passes(
                 "# PHASE_HANDOFF.md",
                 "Current gate: Gate 0",
                 "Status: READY FOR GATEKEEPER REVIEW",
-                "Commit: deadbeef",
+                "Implementation commit: deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+                "Evidence commit: deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
                 "Next authorized action: Independent Gate 0 review",
             ]
         ),

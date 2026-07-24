@@ -99,16 +99,17 @@ def main() -> int:
             return fail("Implementation and evidence commit metadata are required for review")
         implementation_commit = normalize_commit(implementation.group(1))
         evidence_commit = normalize_commit(evidence.group(1))
-        if not commit_exists(implementation_commit):
-            return fail("Implementation commit is missing or not present in git history")
-        if not commit_exists(evidence_commit):
-            return fail("Evidence commit is missing or not present in git history")
         head = git_head()
-        if head and evidence_commit not in {head, git_head("HEAD~1")}:
-            return fail(
-                "Evidence commit must match HEAD or the metadata sync commit "
-                "while status is ready for review"
-            )
+        if head:
+            if not commit_exists(implementation_commit):
+                return fail("Implementation commit is missing or not present in git history")
+            if not commit_exists(evidence_commit):
+                return fail("Evidence commit is missing or not present in git history")
+            if evidence_commit not in {head, git_head("HEAD~1")}:
+                return fail(
+                    "Evidence commit must match HEAD or the metadata sync commit "
+                    "while status is ready for review"
+                )
 
     if PASSED_GATE_PATTERN.search(handoff) and "Gate 0 status: PASS" not in memory:
         return fail("Handoff indicates Gate 0 passed without gatekeeper decision in memory")

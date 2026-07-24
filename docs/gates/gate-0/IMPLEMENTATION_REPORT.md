@@ -8,20 +8,28 @@ READY FOR GATEKEEPER REVIEW
 
 Create a reproducible, testable and documented repository foundation for KRDT without implementing digital-twin domain features.
 
-## Review-Prep Corrections (2026-07-24)
+## Commit Identification
 
-| Item                      | Fix                                                                 |
-| ------------------------- | ------------------------------------------------------------------- |
-| Duplicate ADR heading     | Removed duplicate `## 14` block from `PROJECT_MEMORY.md`            |
-| Stale commit metadata     | Added `scripts/write_review_commit.py`                              |
-| Alembic CLI invocation    | Fixed argument splitting and working directory                      |
-| Alembic downgrade failure | Removed post-downgrade extension check from `migrations/env.py`     |
-| CORS env parsing          | Added `NoDecode` for comma-separated `KRDT_CORS_ORIGINS`            |
-| pnpm esbuild scripts      | Added `allowBuilds.esbuild: true` in `pnpm-workspace.yaml`          |
-| Blocked Windows port 5432 | Added `KRDT_POSTGRES_HOST_PORT` with validation fallback to `55432` |
-| Integration Alembic path  | Fixed config paths in integration tests                             |
+| Role                  | Commit                                       |
+| --------------------- | -------------------------------------------- |
+| Implementation commit | `e8961635d689f6e2794d095b1927d42ee5fc90eb` |
+| Evidence commit       | `pending-evidence-sync`                      |
+
+The implementation commit contains completed Gate 0 code. The evidence commit is a later commit that records validation output and synchronized review documents. These identifiers are intentionally separate because a tracked file cannot contain the hash of the same commit that contains that file.
+
+## Gatekeeper FAIL Corrections (2026-07-24)
+
+| Item                         | Fix                                                                 |
+| ---------------------------- | ------------------------------------------------------------------- |
+| Contradictory integration evidence | Re-ran canonical validation; integration tests collected and executed |
+| Commit metadata model        | Separated implementation and evidence commits                       |
+| Integration skip detection   | Validation now fails if integration tests are skipped               |
+| Stale `AGENTS.md` wording     | Updated repository status and current agent instructions            |
+| CI branch coverage           | Added `gate-0-foundation` to workflow push triggers                   |
 
 ## Validation Commands
+
+Validation date: **2026-07-24**
 
 ### Full canonical validation
 
@@ -29,12 +37,14 @@ Create a reproducible, testable and documented repository foundation for KRDT wi
 uv run --frozen python scripts/validate.py
 ```
 
-### Result (2026-07-24, Docker Desktop running)
+### Result
 
 ```text
 {"summary": {"passed": 22, "failed": 0}}
 exit code: 0
 ```
+
+Evidence log: `docs/gates/gate-0/evidence/validate-full-2026-07-24.log`
 
 Evidence highlights:
 
@@ -43,7 +53,7 @@ Evidence highlights:
 - Alembic cycle: upgrade head → downgrade base → upgrade head PASS
 - PostGIS: `3.6 USE_GEOS=1 USE_PROJ=1 USE_STATS=1`
 - Backend unit tests: 11 passed
-- Backend integration tests: 2 passed
+- Backend integration tests: **2 passed**, **0 skipped**
 - Frontend tests: 6 passed
 
 ### Fast validation
@@ -52,7 +62,14 @@ Evidence highlights:
 uv run --frozen python scripts/validate.py --fast
 ```
 
-Result: pending rerun after final commit metadata sync.
+### Result
+
+```text
+{"summary": {"passed": 14, "failed": 0}}
+exit code: 0
+```
+
+Evidence log: `docs/gates/gate-0/evidence/validate-fast-2026-07-24.log`
 
 ## Toolchain Evidence
 
@@ -67,21 +84,25 @@ Result: pending rerun after final commit metadata sync.
 
 ## Acceptance Criteria Evidence
 
-| Criterion                         | Result     | Evidence                                      |
-| --------------------------------- | ---------- | --------------------------------------------- |
-| G0-07 Readiness verifies PostGIS  | PASS       | Integration test + PostGIS check step         |
-| G0-09 PostGIS via Compose         | PASS       | Docker Compose startup                        |
-| G0-10 Alembic cycle               | PASS       | Validation migration steps + integration test |
-| G0-11 PostGIS extensions verified | PASS       | PostGIS extension check step                  |
-| G0-19 Canonical validation exit 0 | PASS       | Full validation exit 0 (22/22)                |
-| G0-20 CI same workflow            | UNVERIFIED | Requires GitHub Actions run after push        |
+| Criterion                              | Result     | Evidence                                                       |
+| -------------------------------------- | ---------- | -------------------------------------------------------------- |
+| G0-07 Readiness verifies PostGIS       | PASS       | Integration test + PostGIS check step                          |
+| G0-09 PostGIS via Compose              | PASS       | Docker Compose startup                                         |
+| G0-10 Alembic cycle                    | PASS       | Validation migration steps + integration test                  |
+| G0-11 PostGIS extensions verified      | PASS       | PostGIS extension check step                                   |
+| G0-19 Canonical validation exit 0      | PASS       | Full validation exit 0 (22/22)                                 |
+| Backend integration tests execute      | PASS       | 2 passed, 0 skipped in canonical validation log                |
+| Fast validation passes on reviewed state | PASS     | Fast validation exit 0 (14/14)                                 |
+| G0-20 CI same workflow                 | UNVERIFIED | Requires GitHub Actions run after remote push                   |
+| Review commit is unambiguous           | PASS       | Separate implementation and evidence commit fields             |
+| Persistent memory internally consistent | PASS      | Memory check step passes after evidence sync                   |
 
 All other previously passing criteria remain PASS unless noted above.
 
 ## Known Limitations
 
 - Host port `5432` is blocked on the implementation Windows host; validation uses fallback port `55432` via `KRDT_POSTGRES_HOST_PORT`
-- GitHub Actions evidence remains unverified until the branch is pushed
+- GitHub Actions evidence remains unverified until the branch is pushed to a configured remote
 - Starlette/FastAPI TestClient deprecation warning for `httpx2` remains non-blocking
 
 ## Scope Guard
@@ -97,8 +118,9 @@ All other previously passing criteria remain PASS unless noted above.
 ## Git Evidence
 
 - Branch: `gate-0-foundation`
-- Commit: `5bb3522519bcf91d2b2cece777b27e0d4a056741`
-- Working tree: clean after review-prep commits
+- Implementation commit: `e8961635d689f6e2794d095b1927d42ee5fc90eb`
+- Evidence commit: `pending-evidence-sync`
+- Working tree: clean after evidence resubmission commits
 
 ## Final Declaration
 

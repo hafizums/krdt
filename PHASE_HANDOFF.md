@@ -2,19 +2,21 @@
 
 ## 1. Handoff Metadata
 
-| Field         | Value                                    |
-| ------------- | ---------------------------------------- |
-| Project       | Kundasang Resilience Digital Twin        |
-| Current gate  | Gate 0                                   |
-| Current phase | Gate 0 review-prep complete              |
-| Status        | READY FOR GATEKEEPER REVIEW              |
-| Last updated  | 2026-07-24                               |
-| Updated by    | Cursor                                   |
-| Branch        | gate-0-foundation                        |
-| Commit        | 5bb3522519bcf91d2b2cece777b27e0d4a056741 |
-| Working tree  | clean                                    |
+| Field                 | Value                                    |
+| --------------------- | ---------------------------------------- |
+| Project               | Kundasang Resilience Digital Twin        |
+| Current gate          | Gate 0                                   |
+| Current phase         | Gate 0 evidence resubmission             |
+| Status                | READY FOR GATEKEEPER REVIEW              |
+| Last updated          | 2026-07-24                               |
+| Updated by            | Cursor                                   |
+| Branch                | gate-0-foundation                        |
+| Implementation commit | `e8961635d689f6e2794d095b1927d42ee5fc90eb` |
+| Evidence commit       | `pending-evidence-sync`                  |
+| Working tree          | clean                                    |
 
-Commit: 5bb3522519bcf91d2b2cece777b27e0d4a056741
+Implementation commit: e8961635d689f6e2794d095b1927d42ee5fc90eb
+Evidence commit: pending-evidence-sync
 
 Current gate: Gate 0
 Status: READY FOR GATEKEEPER REVIEW
@@ -24,31 +26,24 @@ Next authorized action: Independent Gate 0 review
 
 ## 2. Current Objective
 
-Gate 0 foundation is implemented. Review-prep corrections address memory-file defects, validation bugs, and missing Docker-backed evidence.
+Resubmit Gate 0 with synchronized validation evidence after gatekeeper FAIL review on contradictory integration-test and commit metadata records.
 
 ---
 
-## 3. Corrections Completed
+## 3. Gatekeeper FAIL Corrections Applied
 
-- Removed duplicate ADR heading in `PROJECT_MEMORY.md`
-- Fixed Alembic command invocation and downgrade path in `scripts/validate.py`
-- Fixed CORS env parsing for migration commands (`NoDecode`)
-- Removed post-downgrade extension verification from `migrations/env.py`
-- Added configurable PostgreSQL host port (`KRDT_POSTGRES_HOST_PORT`, default `5432`)
-- Added `allowBuilds.esbuild: true` for deterministic pnpm installs
-- Added `scripts/write_review_commit.py` to synchronize review commit metadata
+- Separated implementation commit from evidence commit in review metadata
+- Hardened `scripts/validate.py` to fail when integration tests are skipped
+- Propagated database env vars to integration-test subprocesses
+- Updated `scripts/check_memory.py` and `scripts/write_review_commit.py`
+- Updated stale Gate 0 instructions in `AGENTS.md`
+- Added `gate-0-foundation` branch trigger to GitHub Actions workflow
 
 ---
 
 ## 4. Latest Validation Evidence
 
-### Fast validation
-
-```bash
-uv run --frozen python scripts/validate.py --fast
-```
-
-Result: exit code 0 (14/14) after final metadata sync on 2026-07-24.
+Validation date: **2026-07-24**
 
 ### Full canonical validation
 
@@ -56,37 +51,58 @@ Result: exit code 0 (14/14) after final metadata sync on 2026-07-24.
 uv run --frozen python scripts/validate.py
 ```
 
-Result on 2026-07-24 with Docker Desktop running:
+Result:
 
 ```text
 {"summary": {"passed": 22, "failed": 0}}
 exit code: 0
 ```
 
-Notes:
+Evidence log: `docs/gates/gate-0/evidence/validate-full-2026-07-24.log`
 
-- Host PostgreSQL port `5432` is blocked on this Windows host; validation automatically fell back to host port `55432` while keeping container port `5432`.
+Highlights:
+
+- Host PostgreSQL port `5432` is blocked on this Windows host; validation automatically fell back to host port `55432`.
 - PostGIS version observed: `3.6 USE_GEOS=1 USE_PROJ=1 USE_STATS=1`
 - Alembic cycle: upgrade head → downgrade base → upgrade head succeeded
-- Backend integration tests were skipped in this run because the subprocess environment did not yet propagate the fallback port to pytest collection (follow-up fix applied)
+- Backend unit tests: 11 passed
+- Backend integration tests: **2 passed**, **0 skipped**
+- Frontend tests: 6 passed
+
+### Fast validation
+
+```bash
+uv run --frozen python scripts/validate.py --fast
+```
+
+Result:
+
+```text
+{"summary": {"passed": 14, "failed": 0}}
+exit code: 0
+```
+
+Evidence log: `docs/gates/gate-0/evidence/validate-fast-2026-07-24.log`
 
 ---
 
 ## 5. Remaining Evidence Gaps
 
-- GitHub Actions run still **UNVERIFIED** (requires remote push)
-- Gatekeeper must review the final commit hash recorded after `scripts/write_review_commit.py`
+- GitHub Actions run remains **UNVERIFIED** until the branch is pushed to a remote and the workflow completes successfully
 
 ---
 
 ## 6. Blockers
 
-NONE for gatekeeper review preparation on repository evidence.
+- No git remote is configured in the local repository; CI evidence cannot be produced locally without a remote push
 
 ---
 
 ## 7. Exact Next Authorized Action
 
-Independent Gate 0 review by the gatekeeper on branch `gate-0-foundation` at the commit recorded by `scripts/write_review_commit.py`.
+Independent Gate 0 re-review by the gatekeeper on branch `gate-0-foundation` using:
+
+- Implementation commit: `e8961635d689f6e2794d095b1927d42ee5fc90eb`
+- Evidence commit: recorded by `scripts/write_review_commit.py` after evidence commit
 
 Cursor must not begin Gate 1.
