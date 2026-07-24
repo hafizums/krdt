@@ -2,18 +2,18 @@
 
 ## 1. Handoff Metadata
 
-| Field                 | Value                                    |
-| --------------------- | ---------------------------------------- |
-| Project               | Kundasang Resilience Digital Twin        |
-| Current gate          | Gate 0                                   |
-| Current phase         | Gate 0 evidence resubmission             |
-| Status                | READY FOR GATEKEEPER REVIEW              |
-| Last updated          | 2026-07-24                               |
-| Updated by            | Cursor                                   |
-| Branch                | gate-0-foundation                        |
+| Field                 | Value                                      |
+| --------------------- | ------------------------------------------ |
+| Project               | Kundasang Resilience Digital Twin          |
+| Current gate          | Gate 0                                     |
+| Current phase         | Gate 0 evidence resubmission               |
+| Status                | READY FOR GATEKEEPER REVIEW                |
+| Last updated          | 2026-07-24                                 |
+| Updated by            | Cursor                                     |
+| Branch                | gate-0-foundation                          |
 | Implementation commit | `e8961635d689f6e2794d095b1927d42ee5fc90eb` |
-| Evidence commit       | `pending-evidence-sync`                  |
-| Working tree          | clean |
+| Evidence commit       | `pending-evidence-sync`                    |
+| Working tree          | clean                                      |
 
 Implementation commit: e8961635d689f6e2794d095b1927d42ee5fc90eb
 Evidence commit: 8a07bb0d132978f47ec153c54306b544e4e85504

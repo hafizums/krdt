@@ -10,22 +10,22 @@ Create a reproducible, testable and documented repository foundation for KRDT wi
 
 ## Commit Identification
 
-| Role                  | Commit                                       |
-| --------------------- | -------------------------------------------- |
+| Role                  | Commit                                     |
+| --------------------- | ------------------------------------------ |
 | Implementation commit | `e8961635d689f6e2794d095b1927d42ee5fc90eb` |
-| Evidence commit       | `pending-evidence-sync`                      |
+| Evidence commit       | `pending-evidence-sync`                    |
 
 The implementation commit contains completed Gate 0 code. The evidence commit is a later commit that records validation output and synchronized review documents. These identifiers are intentionally separate because a tracked file cannot contain the hash of the same commit that contains that file.
 
 ## Gatekeeper FAIL Corrections (2026-07-24)
 
-| Item                         | Fix                                                                 |
-| ---------------------------- | ------------------------------------------------------------------- |
+| Item                               | Fix                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------- |
 | Contradictory integration evidence | Re-ran canonical validation; integration tests collected and executed |
-| Commit metadata model        | Separated implementation and evidence commits                       |
-| Integration skip detection   | Validation now fails if integration tests are skipped               |
-| Stale `AGENTS.md` wording     | Updated repository status and current agent instructions            |
-| CI branch coverage           | Added `gate-0-foundation` to workflow push triggers                   |
+| Commit metadata model              | Separated implementation and evidence commits                         |
+| Integration skip detection         | Validation now fails if integration tests are skipped                 |
+| Stale `AGENTS.md` wording          | Updated repository status and current agent instructions              |
+| CI branch coverage                 | Added `gate-0-foundation` to workflow push triggers                   |
 
 ## Validation Commands
 
@@ -84,18 +84,18 @@ Evidence log: `docs/gates/gate-0/evidence/validate-fast-2026-07-24.log`
 
 ## Acceptance Criteria Evidence
 
-| Criterion                              | Result     | Evidence                                                       |
-| -------------------------------------- | ---------- | -------------------------------------------------------------- |
-| G0-07 Readiness verifies PostGIS       | PASS       | Integration test + PostGIS check step                          |
-| G0-09 PostGIS via Compose              | PASS       | Docker Compose startup                                         |
-| G0-10 Alembic cycle                    | PASS       | Validation migration steps + integration test                  |
-| G0-11 PostGIS extensions verified      | PASS       | PostGIS extension check step                                   |
-| G0-19 Canonical validation exit 0      | PASS       | Full validation exit 0 (22/22)                                 |
-| Backend integration tests execute      | PASS       | 2 passed, 0 skipped in canonical validation log                |
-| Fast validation passes on reviewed state | PASS     | Fast validation exit 0 (14/14)                                 |
-| G0-20 CI same workflow                 | UNVERIFIED | Requires GitHub Actions run after remote push                   |
-| Review commit is unambiguous           | PASS       | Separate implementation and evidence commit fields             |
-| Persistent memory internally consistent | PASS      | Memory check step passes after evidence sync                   |
+| Criterion                                | Result     | Evidence                                           |
+| ---------------------------------------- | ---------- | -------------------------------------------------- |
+| G0-07 Readiness verifies PostGIS         | PASS       | Integration test + PostGIS check step              |
+| G0-09 PostGIS via Compose                | PASS       | Docker Compose startup                             |
+| G0-10 Alembic cycle                      | PASS       | Validation migration steps + integration test      |
+| G0-11 PostGIS extensions verified        | PASS       | PostGIS extension check step                       |
+| G0-19 Canonical validation exit 0        | PASS       | Full validation exit 0 (22/22)                     |
+| Backend integration tests execute        | PASS       | 2 passed, 0 skipped in canonical validation log    |
+| Fast validation passes on reviewed state | PASS       | Fast validation exit 0 (14/14)                     |
+| G0-20 CI same workflow                   | UNVERIFIED | Requires GitHub Actions run after remote push      |
+| Review commit is unambiguous             | PASS       | Separate implementation and evidence commit fields |
+| Persistent memory internally consistent  | PASS       | Memory check step passes after evidence sync       |
 
 All other previously passing criteria remain PASS unless noted above.
 
