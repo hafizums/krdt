@@ -11,10 +11,10 @@
 | Last updated  | 2026-07-24                        |
 | Updated by    | Cursor                            |
 | Branch        | gate-0-foundation                 |
-| Commit        | pending-final-commit              |
-| Working tree  | Pending final commit              |
+| Commit        | 7c90da2c755430fa7fbef6b6f39ee9c224224b77 |
+| Working tree  | clean                                     |
 
-Commit: pending-final-commit
+Commit: 7c90da2c755430fa7fbef6b6f39ee9c224224b77
 
 Current gate: Gate 0
 Status: READY FOR GATEKEEPER REVIEW
@@ -56,7 +56,6 @@ Gate 0 — Repository and Governance Foundation is implemented and awaiting inde
 
 - Full local validation requiring Docker was not executed in this environment because Docker CLI is unavailable on the implementation host
 - CI evidence must be collected from GitHub Actions after push
-- `Commit` field above will be updated to the final commit hash before submission
 
 ---
 
@@ -68,9 +67,15 @@ Command:
 uv run --frozen python scripts/validate.py --fast
 ```
 
-Result: pending final rerun after commit with Node 24.18.0 and uv 0.11.32 available on PATH.
+Result: exit code 0 (14/14 steps passed) on 2026-07-24 with Node 24.18.0, pnpm 11.14.0, Python 3.13.14, uv 0.11.32.
 
-Full validation with database integration requires Docker Compose and was not completed locally.
+Full canonical validation:
+
+```bash
+uv run --frozen python scripts/validate.py
+```
+
+Result: exit code 1 — Docker CLI unavailable on the implementation host (7 database-related steps failed). Non-Docker steps passed (15/22).
 
 ---
 
