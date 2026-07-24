@@ -13,7 +13,7 @@ Create a reproducible, testable and documented repository foundation for KRDT wi
 | Role                  | Commit                                     |
 | --------------------- | ------------------------------------------ |
 | Implementation commit | `e8961635d689f6e2794d095b1927d42ee5fc90eb` |
-| Evidence commit       | `8a07bb0d132978f47ec153c54306b544e4e85504` |
+| Evidence commit       | `10264bafb863f09b86a6c6aea5115b6b3dbfcade` |
 
 The implementation commit contains completed Gate 0 code. The evidence commit is a later commit that records validation output and synchronized review documents. These identifiers are intentionally separate because a tracked file cannot contain the hash of the same commit that contains that file.
 
@@ -119,7 +119,7 @@ All other previously passing criteria remain PASS unless noted above.
 
 - Branch: `gate-0-foundation`
 - Implementation commit: `e8961635d689f6e2794d095b1927d42ee5fc90eb`
-- Evidence commit: `8a07bb0d132978f47ec153c54306b544e4e85504`
+- Evidence commit: `10264bafb863f09b86a6c6aea5115b6b3dbfcade`
 - Working tree: clean after evidence resubmission commits
 
 ## Final Declaration
