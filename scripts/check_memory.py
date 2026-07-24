@@ -58,6 +58,17 @@ def commit_exists(commit: str) -> bool:
     return result.returncode == 0
 
 
+def commit_is_ancestor(ancestor: str, descendant: str) -> bool:
+    result = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
 def normalize_commit(value: str) -> str:
     return value.strip().strip("`")
 
@@ -105,10 +116,11 @@ def main() -> int:
                 return fail("Implementation commit is missing or not present in git history")
             if not commit_exists(evidence_commit):
                 return fail("Evidence commit is missing or not present in git history")
-            if evidence_commit not in {head, git_head("HEAD~1")}:
+            if not commit_is_ancestor(implementation_commit, evidence_commit):
+                return fail("Implementation commit must precede the evidence commit")
+            if not commit_is_ancestor(evidence_commit, head):
                 return fail(
-                    "Evidence commit must match HEAD or the metadata sync commit "
-                    "while status is ready for review"
+                    "Evidence commit must be an ancestor of HEAD while status is ready for review"
                 )
 
     if PASSED_GATE_PATTERN.search(handoff) and "Gate 0 status: PASS" not in memory:
