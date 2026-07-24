@@ -205,7 +205,7 @@ PostGIS extension checks: FAIL (docker not available)
 ## Git Evidence
 
 - Branch: `gate-0-foundation`
-- Commit: `7c90da2c755430fa7fbef6b6f39ee9c224224b77`
+- Commit: `80f00944ce1c7d2a1cdbef24a564298140d08874`
 - Working tree status: clean after initial Gate 0 commit
 - Diff summary: 78 files added in foundation commit
 
